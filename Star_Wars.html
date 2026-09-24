@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Wars Battle</title>
+<style>
+/* 1. BASE */
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:white;background:url("bg/bg.jpg") center/cover fixed no-repeat}
+.pagina{width:95%;max-width:1400px;margin:auto;padding:25px}
+
+/* 2. CABEÇALHO */
+.logo{display:block;width:280px;max-width:60%;margin:auto}
+h1{text-align:center;margin:10px 0 20px;text-shadow:2px 2px 4px #000}
+#status{min-height:20px;text-align:center}
+
+/* 3. BATALHA: Player 1 | VS | Player 2 */
+.batalha{width:100%;margin:30px auto;display:grid;grid-template-columns:minmax(0,1fr) 100px minmax(0,1fr);gap:20px;align-items:center}
+.jogador{min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center}
+.titulo-jogador{margin-bottom:10px;color:#ffc800;font-family:"Arial Black",Arial,sans-serif;font-size:20px;font-weight:900;font-style:italic;letter-spacing:2px;text-transform:uppercase;-webkit-text-stroke:1px #000}
+
+/* 4. COMBO BOX */
+.jogador select{width:330px;max-width:90%;height:42px;margin-bottom:30px;padding:5px;border:0;border-radius:6px;font-size:15px;text-align:center;cursor:pointer}
+
+/* 5. CARD + BONECO */
+.personagem-conteudo{width:100%;height:350px;display:flex;justify-content:center;align-items:flex-end;gap:10px}
+.info{display:none;width:260px;height:278px;flex-shrink:0;padding:18px;border:2px solid #f5c518;border-radius:10px;background:rgba(10,10,10,.85);box-shadow:0 0 18px rgba(245,197,24,.35)}
+.info.ativo{display:block}
+.nome{margin:0 0 15px;padding-bottom:10px;color:#f5c518;border-bottom:1px solid #f5c518;text-transform:uppercase}
+.campo{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:10px 5px;border-bottom:1px solid rgba(255,255,255,.2)}
+.tag{color:#aaa;font-size:12px;text-transform:uppercase}
+.valor{font-weight:bold;text-transform:capitalize}
+
+.area-imagem{width:230px;height:350px;display:flex;justify-content:center;align-items:flex-end}
+.foto{display:none;max-width:100%;max-height:340px;object-fit:contain;filter:drop-shadow(0 8px 8px #000)}
+.foto.ativo{display:block}
+
+/* Tamanho das imagens. Player 2 fica espelhado para olhar para o centro. */
+#foto1{height:300px;transform:scaleX(-1)}
+#foto2{height:300px;}
+
+/* 6. VS */
+.versus{align-self:center;display:flex;justify-content:center;align-items:center;text-align:center}
+.versus span{color:#f5c518;font-size:65px;font-weight:bold;font-style:italic;text-shadow:3px 3px 0 #9b0000,6px 6px 0 #000}
+
+/* 7. RESPONSIVO */
+@media(max-width:900px){
+  .batalha{grid-template-columns:1fr}
+  .versus{margin:10px 0}
+  .personagem-conteudo{height:auto;min-height:350px}
+}
+@media(max-width:600px){
+  .personagem-conteudo{flex-direction:column;align-items:center;height:auto}
+  .area-imagem{height:300px}
+  .foto{max-height:290px}
+}
+</style>
+</head>
+
+<body>
+
+<main class="pagina">
+
+    <img src="bg/logo.png" class="logo" alt="Star Wars">
+
+    <h1>Escolha seus personagens</h1>
+
+    <div id="status">Carregando personagens...</div>
+
+    <section class="batalha">
+
+    <!-- PLAYER 1 -->
+    <div class="jogador">
+
+        <div class="titulo-jogador">
+            PLAYER 1
+        </div>
+
+        <select id="personagem1">
+            <option value="">
+                Escolha seu personagem
+            </option>
+        </select>
+
+        <div class="personagem-conteudo">
+
+            <!-- CARD -->
+            <div id="info1" class="info">
+
+                <h2 id="nome1" class="nome"></h2>
+
+                <div class="campo">
+                    <span class="tag">Nascimento</span>
+                    <span id="aniversario1" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="tag">Gênero</span>
+                    <span id="sexo1" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="tag">Cor da pele</span>
+                    <span id="corPele1" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="tag">Cor dos olhos</span>
+                    <span id="corOlhos1" class="valor"></span>
+                </div>
+
+            </div>
+
+            <!-- BONECO -->
+            <div class="area-imagem">
+                <img id="foto1" class="foto" alt="">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- VS -->
+    <div class="versus">
+        <span>VS</span>
+    </div>
+
+
+    <!-- PLAYER 2 -->
+    <div class="jogador">
+
+        <div class="titulo-jogador">
+            PLAYER 2
+        </div>
+
+        <select id="personagem2">
+            <option value="">
+                Escolha seu personagem
+            </option>
+        </select>
+
+        <div class="personagem-conteudo personagem-direita">
+
+            <!-- BONECO -->
+            <div class="area-imagem">
+                <img id="foto2" class="foto" alt="">
+            </div>
+
+            <!-- CARD -->
+            <div id="info2" class="info">
+
+                <h2 id="nome2" class="nome"></h2>
+
+                <div class="campo">
+                    <span class="tag">Nascimento</span>
+                    <span id="aniversario2" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="tag">Gênero</span>
+                    <span id="sexo2" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="tag">Cor da pele</span>
+                    <span id="corPele2" class="valor"></span>
+                </div>
+
+                <div class="campo">
+                    <span class="tag">Cor dos olhos</span>
+                    <span id="corOlhos2" class="valor"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+</main>
+
+
+<script>
+    /* ==================================================
+       JAVASCRIPT - CONSUMO DA API E INTERAÇÃO DA PÁGINA
+       ================================================== */
+
+    // Endereço da API de personagens de Star Wars
+    const API = "https://swapi.dev/api/people/";
+
+    // Elementos que vamos usar várias vezes
+    const select1 = document.getElementById("personagem1");
+    const select2 = document.getElementById("personagem2");
+    const status = document.getElementById("status");
+
+
+    /* --------------------------------------------------
+       1. CARREGAR A LISTA DE PERSONAGENS
+       -------------------------------------------------- */
+    async function carregarListaPersonagens() {
+
+        let url = API;
+        const personagens = [];
+
+        try {
+
+            /*
+                A SWAPI é paginada.
+                Enquanto existir uma próxima página (next),
+                continuamos buscando os personagens.
+            */
+            while (url) {
+
+                const resposta = await fetch(url);
+
+                if (!resposta.ok) {
+                    throw new Error("Erro ao acessar a API.");
+                }
+
+                const dados = await resposta.json();
+
+                // Adiciona os personagens desta página à lista
+                personagens.push(...dados.results);
+
+                // Guarda o endereço da próxima página
+                url = dados.next;
+            }
+
+            // Organiza os personagens em ordem alfabética
+            personagens.sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
+
+            // Preenche os dois selects
+            preencherSelect(select1, personagens);
+            preencherSelect(select2, personagens);
+
+            status.textContent = "";
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            status.textContent =
+                "Não foi possível carregar os personagens.";
+        }
+    }
+
+
+    /* --------------------------------------------------
+       2. PREENCHER UM SELECT
+       -------------------------------------------------- */
+    function preencherSelect(select, personagens) {
+
+        personagens.forEach(personagem => {
+
+            const option = document.createElement("option");
+
+            // Guardamos a URL do personagem no value
+            option.value = personagem.url;
+
+            // Nome que aparece para o usuário
+            option.textContent = personagem.name;
+
+            select.appendChild(option);
+        });
+    }
+
+
+    /* --------------------------------------------------
+       3. CARREGAR O PERSONAGEM ESCOLHIDO
+       -------------------------------------------------- */
+    async function carregarPersonagem(url, lado) {
+
+        // Se nenhuma opção estiver selecionada, limpa o card
+        if (!url) {
+            limparPersonagem(lado);
+            return;
+        }
+
+        try {
+
+            // Consulta os dados do personagem escolhido
+            const resposta = await fetch(url);
+
+            if (!resposta.ok) {
+                throw new Error("Personagem não encontrado.");
+            }
+
+            const personagem = await resposta.json();
+
+            // Mostra os dados recebidos da API
+            document.getElementById(`nome${lado}`).textContent =
+                personagem.name;
+
+            document.getElementById(`aniversario${lado}`).textContent =
+                personagem.birth_year;
+
+            document.getElementById(`sexo${lado}`).textContent =
+                personagem.gender;
+
+            document.getElementById(`corPele${lado}`).textContent =
+                personagem.skin_color;
+
+            document.getElementById(`corOlhos${lado}`).textContent =
+                personagem.eye_color;
+
+
+            // Elementos da imagem e do card
+            const foto = document.getElementById(`foto${lado}`);
+            const info = document.getElementById(`info${lado}`);
+
+
+            /*
+                FALLBACK DA IMAGEM
+
+                Primeiro tentamos:
+                personagens/Darth Vader.png
+                personagens/Yoda.png
+                etc.
+
+                Se a imagem não existir, o navegador usa:
+                personagens/sem-imagem.png
+            */
+            foto.onerror = function () {
+
+                // Evita um novo erro caso sem-imagem.png não exista
+                this.onerror = null;
+
+                this.src = "personagens/sem-imagem.png";
+                this.alt = "Imagem não disponível";
+            };
+
+
+            // Tenta carregar a imagem usando o nome da API
+            foto.src = `personagens/${personagem.name}.png`;
+            foto.alt = personagem.name;
+
+
+            // Mostra imagem e card
+            foto.classList.add("ativo");
+            info.classList.add("ativo");
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            status.textContent =
+                "Erro ao carregar o personagem.";
+        }
+    }
+
+
+    /* --------------------------------------------------
+       4. LIMPAR O PERSONAGEM
+       -------------------------------------------------- */
+    function limparPersonagem(lado) {
+
+        const foto = document.getElementById(`foto${lado}`);
+        const info = document.getElementById(`info${lado}`);
+
+        foto.classList.remove("ativo");
+        info.classList.remove("ativo");
+
+        foto.removeAttribute("src");
+    }
+
+
+    /* --------------------------------------------------
+       5. EVENTOS DOS SELECTS
+       -------------------------------------------------- */
+
+    // Quando mudar o Player 1
+    select1.addEventListener("change", function () {
+        carregarPersonagem(select1.value, 1);
+    });
+
+    // Quando mudar o Player 2
+    select2.addEventListener("change", function () {
+        carregarPersonagem(select2.value, 2);
+    });
+
+
+    /* --------------------------------------------------
+       6. INICIAR A PÁGINA
+       -------------------------------------------------- */
+
+    carregarListaPersonagens();
+
+</script>
+
+</body>
+</html>
